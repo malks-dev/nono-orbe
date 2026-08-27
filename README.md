@@ -1,3 +1,11 @@
+<p align="center">
+  <img
+    src="app/public/assets/image/compartilhamento/nono-orbe-social-preview-1280x640.png"
+    alt="Banner do projeto Nono Orbe"
+    width="100%"
+  >
+</p>
+
 # Nono Orbe
 
 Sistema-base do ecossistema **ORBE**: um ambiente pessoal, aberto e programável para organizar a vida, construir projetos e publicar novas experiências na internet.
