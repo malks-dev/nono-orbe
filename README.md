@@ -113,4 +113,13 @@ Cada etapa deve atualizar, no mínimo:
 
 ## Licença
 
-A licença open source será definida antes da primeira publicação estável. Até essa decisão, não presuma permissão de redistribuição.
+O ORBE é um projeto de código-fonte disponível sob a
+[Licença Comunitária Individual ORBE v0.1](LICENSE).
+
+A licença permite baixar, instalar, utilizar individualmente e modificar o
+projeto. Redistribuições e versões comerciais modificadas devem respeitar as
+condições de licenciamento individual e não podem utilizar o nome, os logos
+ou a identidade oficial do ORBE.
+
+Consulte o arquivo [`LICENSE`](LICENSE) antes de utilizar, modificar ou
+redistribuir o projeto.
