@@ -1,0 +1,36 @@
+name: nono-orbe
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+
+    container_name: nono-orbe-web
+    restart: unless-stopped
+
+    ports:
+      # Disponível no servidor e na rede local.
+      - "0.0.0.0:${ORBE_PORT:-9000}:80"
+
+    volumes:
+      # Código local montado como somente leitura.
+      - ./app/public:/var/www/html:ro
+
+    healthcheck:
+      # Cada posição da lista é uma string separada:
+      #
+      # CMD  → execução direta, sem shell
+      # php  → executável
+      # -r   → executa código PHP informado em texto
+      # exit → retorna 0 quando a página responde e 1 quando falha
+      test:
+        - "CMD"
+        - "php"
+        - "-r"
+        - "exit(@file_get_contents('http://localhost/') === false ? 1 : 0);"
+
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s

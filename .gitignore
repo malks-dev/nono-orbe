@@ -1,0 +1,32 @@
+# Configurações e segredos
+.env
+.env.*
+!.env.example
+
+# Obsidian local
+.obsidian/
+
+# Editores
+.idea/
+.vscode/
+
+# Dependências
+vendor/
+node_modules/
+
+# Dados gerados
+storage/cache/*
+storage/logs/*
+storage/sessions/*
+storage/uploads/*
+
+# Arquivos pesados
+docs/videos/
+*.mp4
+*.mov
+*.mkv
+*.avi
+
+# Temporários
+*.log
+*.tmp
