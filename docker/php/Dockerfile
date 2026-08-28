@@ -11,6 +11,7 @@ RUN docker-php-ext-install pdo_mysql \
 WORKDIR /var/www/html
 
 COPY core/ /var/www/core/
+COPY database/webfarm_orbe/migrations/ /var/www/database/migrations/
 COPY app/public/ /var/www/html/
 
 EXPOSE 80

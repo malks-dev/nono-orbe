@@ -27,6 +27,7 @@ services:
       # Código local montado como somente leitura.
       - ./app/public:/var/www/html:ro
       - ./core:/var/www/core:ro
+      - ./database/webfarm_orbe/migrations:/var/www/database/migrations:ro
 
     depends_on:
       mysql:
