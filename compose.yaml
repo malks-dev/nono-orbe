@@ -1,4 +1,4 @@
-name: nono-orbe
+name: nono-orbe-${ORBE_PROJECT_SLUG:-local}
 
 services:
   web:
@@ -6,31 +6,85 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
 
-    container_name: nono-orbe-web
+    container_name: nono-orbe-${ORBE_PROJECT_SLUG:-local}-web
     restart: unless-stopped
 
     ports:
       # Disponível no servidor e na rede local.
       - "0.0.0.0:${ORBE_PORT:-9000}:80"
 
+    environment:
+      APP_ENV: ${ORBE_APP_ENV:-development}
+      APP_DEBUG: ${ORBE_APP_DEBUG:-false}
+      TZ: ${ORBE_TZ:-America/Sao_Paulo}
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${ORBE_DB_NAME:-webfarm_orbe}
+      DB_USER: ${ORBE_DB_USER:-nono_orbe}
+      DB_PASSWORD: ${ORBE_DB_PASSWORD:?Configure ORBE_DB_PASSWORD no arquivo .env}
+
     volumes:
       # Código local montado como somente leitura.
       - ./app/public:/var/www/html:ro
+      - ./core:/var/www/core:ro
+      - ./database/webfarm_orbe/migrations:/var/www/database/migrations:ro
+
+    depends_on:
+      mysql:
+        condition: service_healthy
 
     healthcheck:
-      # Cada posição da lista é uma string separada:
-      #
-      # CMD  → execução direta, sem shell
-      # php  → executável
-      # -r   → executa código PHP informado em texto
-      # exit → retorna 0 quando a página responde e 1 quando falha
       test:
-        - "CMD"
-        - "php"
-        - "-r"
-        - "exit(@file_get_contents('http://localhost/') === false ? 1 : 0);"
-
+        - CMD
+        - php
+        - -r
+        - 'exit(@file_get_contents("http://127.0.0.1/health/") === false ? 1 : 0);'
       interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+    networks:
+      - orbe
+
+  mysql:
+    image: mysql:8.4
+    container_name: nono-orbe-${ORBE_PROJECT_SLUG:-local}-mysql
+    restart: unless-stopped
+
+    ports:
+      # Banco acessível somente no próprio computador.
+      - "127.0.0.1:${ORBE_DB_PORT:-9001}:3306"
+
+    environment:
+      TZ: ${ORBE_TZ:-America/Sao_Paulo}
+      MYSQL_DATABASE: ${ORBE_DB_NAME:-webfarm_orbe}
+      MYSQL_USER: ${ORBE_DB_USER:-nono_orbe}
+      MYSQL_PASSWORD: ${ORBE_DB_PASSWORD:?Configure ORBE_DB_PASSWORD no arquivo .env}
+      MYSQL_ROOT_PASSWORD: ${ORBE_DB_ROOT_PASSWORD:?Configure ORBE_DB_ROOT_PASSWORD no arquivo .env}
+
+    volumes:
+      # O volume Docker não faz parte do repositório.
+      - mysql_data:/var/lib/mysql
+
+      # Executado somente na primeira criação de um volume vazio.
+      - ./database/webfarm_orbe/migrations:/docker-entrypoint-initdb.d:ro
+
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD --silent"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+    networks:
+      - orbe
+
+volumes:
+  mysql_data:
+
+networks:
+  orbe:
+    driver: bridge
