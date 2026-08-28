@@ -14,11 +14,9 @@
 vendor/
 node_modules/
 
-# Dados gerados
-storage/cache/*
-storage/logs/*
-storage/sessions/*
-storage/uploads/*
+# Dados gerados e privados
+storage/*
+!storage/README.md
 
 # Arquivos pesados
 docs/videos/
@@ -27,6 +25,29 @@ docs/videos/
 *.mkv
 *.avi
 
-# Temporários
+# Exportações e dumps
+avatar-*.sql
+avatar-*.zip
+*.sql.gz
+*.dump
+*.backup
+
+# Configurações locais do Docker Compose
+compose.override.yaml
+compose.override.yml
+docker-compose.override.yaml
+docker-compose.override.yml
+
+# Chaves e certificados privados
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Históricos e temporários
+.mysql_history
+.DS_Store
 *.log
 *.tmp
+*.swp
+*.swo
