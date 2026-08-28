@@ -100,7 +100,7 @@ DB_USER=nono_orbe
 DB_PASSWORD=senha_privada
 ```
 
-Os valores reais são fornecidos pela distribuição Local ou pela infraestrutura WebFarm.
+O nome lógico `webfarm_orbe` é canônico e não é configurável na distribuição Local. Os demais valores são fornecidos pela distribuição Local ou pela infraestrutura WebFarm.
 
 O Core não carrega diretamente arquivos `.env` e não mantém credenciais no repositório.
 
@@ -277,10 +277,3 @@ As próximas etapas incluem:
 * fluxo de primeiro acesso;
 * criação do primeiro usuário, cliente pessoal e perfil.
 
-1. revisar alterações documentais
-2. criar o commit de documentação
-3. enviar feat/nono-orbe-core ao remoto
-4. identificar a URL do repositório
-5. revisar todos os READMEs e documentos atuais
-6. comparar documentação com o código implementado
-7. listar correções, pendências e próxima etapa

@@ -19,7 +19,7 @@ services:
       TZ: ${ORBE_TZ:-America/Sao_Paulo}
       DB_HOST: mysql
       DB_PORT: 3306
-      DB_NAME: ${ORBE_DB_NAME:-webfarm_orbe}
+      DB_NAME: webfarm_orbe
       DB_USER: ${ORBE_DB_USER:-nono_orbe}
       DB_PASSWORD: ${ORBE_DB_PASSWORD:?Configure ORBE_DB_PASSWORD no arquivo .env}
 
@@ -58,7 +58,7 @@ services:
 
     environment:
       TZ: ${ORBE_TZ:-America/Sao_Paulo}
-      MYSQL_DATABASE: ${ORBE_DB_NAME:-webfarm_orbe}
+      MYSQL_DATABASE: webfarm_orbe
       MYSQL_USER: ${ORBE_DB_USER:-nono_orbe}
       MYSQL_PASSWORD: ${ORBE_DB_PASSWORD:?Configure ORBE_DB_PASSWORD no arquivo .env}
       MYSQL_ROOT_PASSWORD: ${ORBE_DB_ROOT_PASSWORD:?Configure ORBE_DB_ROOT_PASSWORD no arquivo .env}
