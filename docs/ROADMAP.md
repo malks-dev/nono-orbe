@@ -28,15 +28,16 @@
 * [x] Registros de exportação e importação
 * [x] Política de seeds sem dados pessoais
 * [x] Validação em instalação MySQL descartável
+* [x] Configuração central da aplicação
+* [x] Conexão PDO utilizada pelo PHP
+* [x] Endpoint `/health/`
+* [x] Verificação da conexão com o MySQL
+* [x] Verificação das migrations aplicadas
+* [x] Executor incremental de migrations
+* [x] Checksums SHA-256 e bloqueio concorrente
 
 ### Pendente
 
-* [ ] Configuração central da aplicação
-* [ ] Conexão PDO utilizada pelo PHP
-* [ ] Endpoint `/health`
-* [ ] Verificação da conexão com o MySQL
-* [ ] Verificação das migrations aplicadas
-* [ ] Executor incremental de migrations
 * [ ] Tratamento centralizado de erros
 * [ ] Logs estruturados sem informações sensíveis
 

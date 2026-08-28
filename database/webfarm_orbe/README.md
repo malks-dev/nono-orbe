@@ -1,5 +1,7 @@
 # webfarm_orbe
 
+O nome lógico `webfarm_orbe` é canônico nas distribuições Local e WebFarm.
+
 Banco da experiência personalizada do Nono Orbe.
 
 O esquema foi projetado para funcionar em dois ambientes:
@@ -135,11 +137,20 @@ ORDER BY migration;
 
 ## Atualizações
 
-O mecanismo `/docker-entrypoint-initdb.d` não executa novas migrations em um volume já inicializado.
+O mecanismo `/docker-entrypoint-initdb.d` continua responsável pela criação de uma instalação com volume vazio. Ele não executa novos arquivos quando o volume já foi inicializado.
 
-Enquanto não existir um migrador próprio, novas migrations devem ser aplicadas por um processo manual, controlado e previamente testado.
+Bancos existentes são atualizados pelo executor incremental:
 
-Uma migration publicada não deve ser modificada. Correções recebem um novo arquivo numerado.
+```bash
+docker compose exec -T web \
+  php /var/www/core/bin/migrate.php
+```
+
+O executor ordena os arquivos, impede prefixos duplicados, utiliza bloqueio exclusivo no MySQL, aplica somente migrations pendentes e registra checksums SHA-256. Registros legados sem checksum são vinculados ao conteúdo atual na primeira execução.
+
+Uma migration publicada não deve ser modificada. Correções recebem um novo arquivo numerado. Alterações em arquivos já registrados são rejeitadas pelo checksum.
+
+Como operações DDL do MySQL podem realizar commits implícitos, migrations devem ser validadas previamente em um banco descartável.
 
 Antes de atualizar uma instalação com dados reais:
 

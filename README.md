@@ -15,7 +15,7 @@ Este repositório evolui junto com a própria documentação. Cada etapa técnic
 ## Estado atual
 
 * Última versão lançada: `0.1.0`
-* Próxima versão: em desenvolvimento
+* Próxima versão: `0.2.0` em desenvolvimento
 * Etapa: fundação do Nono Orbe Core
 * Aplicação: PHP 8.3 + Apache
 * Banco: MySQL 8.4
@@ -24,7 +24,7 @@ Este repositório evolui junto com a própria documentação. Cada etapa técnic
 * Acesso no servidor: `http://localhost:9000`
 * Acesso na rede local: `http://IP-DO-SERVIDOR:9000`
 
-A estrutura do banco já está implementada e validada. A aplicação visual ainda não utiliza essas tabelas; conexão PDO, primeiro acesso e autenticação fazem parte das próximas etapas.
+A estrutura do banco, a configuração central, a conexão PDO, o endpoint de saúde e o executor incremental de migrations estão implementados e validados. A aplicação visual ainda não utiliza essas tabelas; primeiro acesso e autenticação fazem parte das próximas etapas.
 
 ## Visão da arquitetura
 
@@ -122,7 +122,14 @@ A fundação atual possui:
 0 dados pessoais incluídos
 ```
 
-As migrations são executadas automaticamente apenas durante a primeira criação de um volume MySQL vazio.
+As migrations são executadas automaticamente durante a primeira criação de um volume MySQL vazio.
+
+Em bancos existentes, aplique somente as migrations pendentes com:
+
+```bash
+docker compose exec -T web \
+  php /var/www/core/bin/migrate.php
+```
 
 Consulte a documentação completa:
 
@@ -135,6 +142,9 @@ Consulte a documentação completa:
 
 ```text
 core/
+├── bootstrap.php
+├── bin/
+│   └── migrate.php
 ├── src/
 │   ├── Config/
 │   ├── Database/
@@ -183,10 +193,17 @@ docker compose logs -f web
 # Ver os logs do MySQL
 docker compose logs -f mysql
 
+# Verificar a saúde da aplicação e do banco
+curl -i http://127.0.0.1:9000/health/
+
+# Aplicar migrations pendentes
+docker compose exec -T web \
+  php /var/www/core/bin/migrate.php
+
 # Verificar as migrations
 docker compose exec -T mysql sh -lc \
   'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" \
-  -e "SELECT migration FROM schema_migrations ORDER BY migration;"'
+  -e "SELECT migration, checksum FROM schema_migrations ORDER BY migration;"'
 
 # Parar os serviços sem remover os dados
 docker compose down
@@ -274,10 +291,8 @@ Cada processo deve atualizar:
 
 As próximas etapas incluem:
 
-* configuração central;
-* conexão PDO;
-* endpoint `/health`;
-* executor incremental de migrations;
+* tratamento centralizado de erros;
+* proteção adicional para produção;
 * primeiro usuário local;
 * perfil dinâmico;
 * categorias e atalhos;
